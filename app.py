@@ -11,15 +11,11 @@ from fastapi.responses import PlainTextResponse
 load_dotenv()
 
 app = FastAPI()
-TWILIO_ACCOUNT_SID="ACc91e651740f9320c4fb012a4bf29fea8"
-TWILIO_AUTH_TOKEN="d63b9a1ea103419783ab13b0355b1170"
-TWILIO_WHATSAPP_FROM="whatsapp:+14155238886"
 
 # Twilio client setup
-TWILIO_SID = TWILIO_ACCOUNT_SID
-TWILIO_AUTH = TWILIO_AUTH_TOKEN
-TWILIO_WHATSAPP_FROM = TWILIO_WHATSAPP_FROM
-
+TWILIO_SID = os.getenv("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH = os.getenv("TWILIO_AUTH_TOKEN")
+TWILIO_WHATSAPP_FROM = os.getenv("TWILIO_WHATSAPP_FROM")
 
 client = Client(TWILIO_SID, TWILIO_AUTH)
 
@@ -42,12 +38,12 @@ def send_message(req: MessageRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# @app.post("/whatsapp-webhook", response_class=PlainTextResponse)
-# async def whatsapp_webhook(
-#     From: str = Form(...),
-#     Body: str = Form(...),
-# ):
-#     print(f"📩 Message from {From}: {Body}")
+@app.post("/whatsapp-webhook", response_class=PlainTextResponse)
+async def whatsapp_webhook(
+    From: str = Form(...),
+    Body: str = Form(...),
+):
+    print(f"📩 Message from {From}: {Body}")
 
-#     # You can now store this in a DB, trigger responses, etc.
-#     return "Received"
+    # You can now store this in a DB, trigger responses, etc.
+    return "Received"
