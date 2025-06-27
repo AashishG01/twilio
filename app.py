@@ -5,12 +5,23 @@ from dotenv import load_dotenv
 import os
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import PlainTextResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 
 # Load .env variables
 load_dotenv()
 
 app = FastAPI()
+
+
+# CORS middleware setup
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Change to a list of allowed origins in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Twilio client setup
 TWILIO_SID = os.getenv("TWILIO_ACCOUNT_SID")
